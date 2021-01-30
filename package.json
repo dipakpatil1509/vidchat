@@ -10,6 +10,7 @@
   "dependencies": {
     "@algoz098/vue-player": "^0.4.3",
     "core-js": "^3.6.5",
+    "firebase": "^8.2.5",
     "vue": "^2.6.11",
     "vue-auto-virtual-scroll-list": "^0.3.0",
     "vue-quick-chat": "^1.2.7",

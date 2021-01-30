@@ -1,5 +1,5 @@
 <template>
-<v-container align-content-space-around  
+<v-container 
   fill-height
   grid-list-xs>
 <v-container v-if="bolp"
@@ -26,7 +26,7 @@
     <v-text-field
       v-model="password"
       :rules="passRules"
-      label="Password"
+      label="password"
       required
       type="password"
    ></v-text-field>
@@ -66,9 +66,9 @@
       
     </v-col>
     <v-col cols="12" md="4" >
-      <div>
+      <v-container fill-height>
       <iframe src="https://vimeo.com/live-chat/506221198/d6b673a365" width="100%" height="100%" frameborder="0"></iframe>
-   </div>
+      </v-container >
       
     </v-col>
   </v-row>
@@ -97,18 +97,29 @@ components:{
       ],
       loading:false,
       name:"",
-      bolp:true
+      bolp:true,
+      lable:''
    }),
 
   methods:{
     login(){
+      let vm = this;
         this.$refs.form.validate();
         if(this.password != ""){
             console.log("next page",this.password);
-             db.collection('password').doc('password').docRef.get()
+            vm.loading=true;
+             db.collection('password').doc('password').get()
              .then(function(doc) {
                   if (doc.exists) {
-                      console.log("Document data:", doc.data());
+                      if(vm.password === doc.get('password')){
+                        console.log("init");
+                        db.collection('users').add({
+                          "name":vm.name,
+                          "time":new Date().toLocaleString(),
+                        })
+                        vm.loading = false;
+                        vm.bolp = false;
+                      }
                   } else {
                       // doc.data() will be undefined in this case
                       console.log("No such document!");
@@ -123,6 +134,7 @@ components:{
   },
   created(){
   this.name=this.$route.params.id;
+  this.lable="welcome "+this.name;
   this.bolp="true"
   console.log('name',this.name);
     },
